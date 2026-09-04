@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Conexión trifásica Y-Y equilibrada</title>
+  <desc id="desc">Esquema de una fuente trifásica conectada en estrella a una carga resistiva equilibrada en estrella, con fases A, B y C y conductor neutro.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#20263a"/>
+      <stop offset="1" stop-color="#343a55"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+    <marker id="arrowA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ff6b6b"/>
+    </marker>
+    <marker id="arrowB" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57b8ff"/>
+    </marker>
+    <marker id="arrowC" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ffd166"/>
+    </marker>
+    <style>
+      .sans{font-family:Arial,Helvetica,sans-serif}.title{font-size:44px;font-weight:700;fill:#fff}.subtitle{font-size:22px;fill:#cbd3ec}.head{font-size:26px;font-weight:700;fill:#fff}.label{font-size:22px;font-weight:700;fill:#fff}.small{font-size:18px;fill:#dbe2f6}.formula{font-size:23px;font-weight:700;fill:#fff}.wire{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}.thin{fill:none;stroke:#dbe2f6;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.node{stroke:#fff;stroke-width:3}.panel{fill:#111827;fill-opacity:.58;stroke:#9aa6c8;stroke-width:2}.res{fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="55" y="45" width="1490" height="810" rx="28" class="panel" filter="url(#shadow)"/>
+
+  <text x="800" y="112" text-anchor="middle" class="sans title">CONEXIÓN TRIFÁSICA Y-Y EQUILIBRADA</text>
+  <text x="800" y="150" text-anchor="middle" class="sans subtitle">Fuente en estrella · carga resistiva en estrella · secuencia ABC</text>
+
+  <rect x="105" y="190" width="410" height="545" rx="24" fill="#1d263d" stroke="#7886aa" stroke-width="2"/>
+  <text x="310" y="238" text-anchor="middle" class="sans head">FUENTE TRIFÁSICA (Y)</text>
+  <text x="310" y="273" text-anchor="middle" class="sans small">Vφ = 120 V RMS · f = 60 Hz</text>
+
+  <!-- Punto neutro de la fuente -->
+  <circle cx="220" cy="465" r="10" fill="#fff"/>
+  <text x="185" y="459" class="sans label">Nₛ</text>
+
+  <!-- Fuentes de fase -->
+  <path d="M220 465 L285 325" class="thin"/>
+  <circle cx="315" cy="305" r="42" fill="#25314d" stroke="#ff6b6b" stroke-width="5"/>
+  <path d="M286 305 C297 282 309 328 322 305 C334 282 346 328 357 305" fill="none" stroke="#ff6b6b" stroke-width="4"/>
+  <path d="M357 305 L485 305" class="wire" stroke="#ff6b6b"/>
+  <text x="385" y="286" class="sans small">V_A = 120∠0° V</text>
+
+  <path d="M220 465 L270 465" class="thin"/>
+  <circle cx="315" cy="465" r="42" fill="#25314d" stroke="#57b8ff" stroke-width="5"/>
+  <path d="M286 465 C297 442 309 488 322 465 C334 442 346 488 357 465" fill="none" stroke="#57b8ff" stroke-width="4"/>
+  <path d="M357 465 L485 465" class="wire" stroke="#57b8ff"/>
+  <text x="385" y="446" class="sans small">V_B = 120∠−120° V</text>
+
+  <path d="M220 465 L285 605" class="thin"/>
+  <circle cx="315" cy="625" r="42" fill="#25314d" stroke="#ffd166" stroke-width="5"/>
+  <path d="M286 625 C297 602 309 648 322 625 C334 602 346 648 357 625" fill="none" stroke="#ffd166" stroke-width="4"/>
+  <path d="M357 625 L485 625" class="wire" stroke="#ffd166"/>
+  <text x="385" y="606" class="sans small">V_C = 120∠120° V</text>
+
+  <!-- Conductores de línea -->
+  <path d="M485 305 L1080 305" class="wire" stroke="#ff6b6b" marker-end="url(#arrowA)"/>
+  <path d="M485 465 L1080 465" class="wire" stroke="#57b8ff" marker-end="url(#arrowB)"/>
+  <path d="M485 625 L1080 625" class="wire" stroke="#ffd166" marker-end="url(#arrowC)"/>
+  <text x="535" y="288" class="sans label" fill="#ff6b6b">A</text>
+  <text x="535" y="448" class="sans label" fill="#57b8ff">B</text>
+  <text x="535" y="608" class="sans label" fill="#ffd166">C</text>
+  <text x="785" y="286" text-anchor="middle" class="sans small">I_A = 10 A</text>
+  <text x="785" y="446" text-anchor="middle" class="sans small">I_B = 10 A</text>
+  <text x="785" y="606" text-anchor="middle" class="sans small">I_C = 10 A</text>
+
+  <!-- Carga en estrella -->
+  <rect x="1080" y="190" width="410" height="545" rx="24" fill="#1d263d" stroke="#7886aa" stroke-width="2"/>
+  <text x="1285" y="238" text-anchor="middle" class="sans head">CARGA EQUILIBRADA (Y)</text>
+  <text x="1285" y="273" text-anchor="middle" class="sans small">R_A = R_B = R_C = 12 Ω</text>
+
+  <!-- Resistencias -->
+  <path d="M1080 305 L1120 305 L1135 285 L1160 325 L1185 285 L1210 325 L1235 285 L1260 305 L1285 305" class="res"/>
+  <path d="M1285 305 L1380 465" class="thin"/>
+  <text x="1165" y="350" class="sans label">R_A</text>
+
+  <path d="M1080 465 L1120 465 L1135 445 L1160 485 L1185 445 L1210 485 L1235 445 L1260 465 L1380 465" class="res"/>
+  <text x="1165" y="510" class="sans label">R_B</text>
+
+  <path d="M1080 625 L1120 625 L1135 605 L1160 645 L1185 605 L1210 645 L1235 605 L1260 625 L1285 625" class="res"/>
+  <path d="M1285 625 L1380 465" class="thin"/>
+  <text x="1165" y="670" class="sans label">R_C</text>
+
+  <circle cx="1380" cy="465" r="11" fill="#fff"/>
+  <text x="1402" y="456" class="sans label">Nₗ</text>
+
+  <!-- Conductor neutro -->
+  <path d="M220 465 L220 700 L1380 700 L1380 465" class="wire" stroke="#cbd3ec"/>
+  <text x="535" y="687" class="sans label">N</text>
+  <text x="800" y="687" text-anchor="middle" class="sans formula">I_N = I_A + I_B + I_C = 0 A</text>
+
+  <!-- Resumen inferior -->
+  <rect x="185" y="770" width="1230" height="56" rx="18" fill="#3a4567" stroke="#9aa6c8" stroke-width="2"/>
+  <text x="800" y="807" text-anchor="middle" class="sans formula">I<tspan baseline-shift="sub" font-size="16">L</tspan> = I<tspan baseline-shift="sub" font-size="16">φ</tspan> = 10 A   ·   V<tspan baseline-shift="sub" font-size="16">L</tspan> = √3·V<tspan baseline-shift="sub" font-size="16">φ</tspan> = 207,85 V   ·   I<tspan baseline-shift="sub" font-size="16">N</tspan> = 0 A</text>
+</svg>

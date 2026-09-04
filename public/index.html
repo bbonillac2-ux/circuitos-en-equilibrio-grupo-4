@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circuitos en Equilibrio: Misión Equilibrio – Rescate de la Red Nexo-3 | UNEMI Posgrados</title>
+  <meta name="description" content="Aplicación web educativa interactiva y gamificada para el análisis de sistemas trifásicos en estrella (Y-Y). Universidad Estatal de Milagro - UNEMI Posgrados.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+  <!-- Global Header -->
+  <header class="app-header" role="banner">
+    <div class="header-container">
+      <div class="brand-area">
+        <div class="logo-wrapper" id="logo-container">
+          <img src="assets/unemi-posgrados.png" 
+               alt="Universidad Estatal de Milagro - Facultad de Posgrados" 
+               id="unemi-logo"
+               class="brand-logo"
+               onerror="handleLogoError()">
+          <div id="logo-fallback" class="logo-fallback hidden" role="status">
+            <span class="badge-dev">AVISO DESARROLLADOR</span>
+            <p>Logotipo oficial UNEMI Posgrados no disponible en assets. Mostrando espacio reservado reglamentario.</p>
+          </div>
+        </div>
+        <div class="header-titles">
+          <h1 class="main-title">Circuitos en Equilibrio</h1>
+          <p class="main-subtitle">Misión Equilibrio – Rescate de la Red Nexo-3</p>
+        </div>
+      </div>
+
+      <!-- Quick Accessibility & Status Controls -->
+      <div class="header-actions">
+        <button id="btn-toggle-motion" class="btn-icon" aria-pressed="false" title="Reducir o pausar animaciones" aria-label="Reducir animaciones">
+          <span class="icon" aria-hidden="true">🎬</span>
+          <span class="btn-text">Animaciones</span>
+        </button>
+        <button id="btn-toggle-contrast" class="btn-icon" aria-pressed="false" title="Alternar alto contraste" aria-label="Modo alto contraste">
+          <span class="icon" aria-hidden="true">👁️</span>
+          <span class="btn-text">Contraste</span>
+        </button>
+        <button id="btn-reset-all" class="btn-secondary btn-sm" title="Reiniciar toda la experiencia">
+          <span class="icon" aria-hidden="true">🔄</span>
+          <span>Reiniciar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="main-nav" role="navigation" aria-label="Navegación principal de la misión">
+      <ul class="nav-list" role="tablist">
+        <li role="presentation">
+          <button role="tab" id="tab-inicio" aria-selected="true" aria-controls="section-inicio" class="nav-tab active">
+            <span class="nav-num">1</span> Inicio
+          </button>
+        </li>
+        <li role="presentation">
+          <button role="tab" id="tab-mision" aria-selected="false" aria-controls="section-mision" class="nav-tab">
+            <span class="nav-num">2</span> Conoce la misión
+          </button>
+        </li>
+        <li role="presentation">
+          <button role="tab" id="tab-recursos" aria-selected="false" aria-controls="section-recursos" class="nav-tab">
+            <span class="nav-num">3</span> Explora y aprende <span id="nav-res-badge" class="badge-pill">0/4</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button role="tab" id="tab-juego" aria-selected="false" aria-controls="section-juego" class="nav-tab highlight">
+            <span class="nav-num">⚡</span> Practica y juega <span id="nav-score-badge" class="badge-pill">0 pts</span>
+          </button>
+        </li>
+        <li role="presentation">
+          <button role="tab" id="tab-tutor" aria-selected="false" aria-controls="section-tutor" class="nav-tab">
+            <span class="nav-num">🤖</span> Tutor IA-Fasor
+          </button>
+        </li>
+        <li role="presentation">
+          <button role="tab" id="tab-resultados" aria-selected="false" aria-controls="section-resultados" class="nav-tab">
+            <span class="nav-num">🏆</span> Resultados
+          </button>
+        </li>
+        <li role="presentation">
+          <button role="tab" id="tab-creditos" aria-selected="false" aria-controls="section-creditos" class="nav-tab">
+            <span class="nav-num">ℹ️</span> Créditos
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Live Announcer for Screen Readers -->
+  <div id="live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main id="main-content" class="app-main">
+
+    <!-- ==================== SECCIÓN 1: INICIO ==================== -->
+    <section id="section-inicio" class="section-panel active" role="tabpanel" aria-labelledby="tab-inicio">
+      <div class="hero-card">
+        <div class="hero-badge">
+          <span class="pulse-indicator" aria-hidden="true"></span>
+          <span>ESTADO CRÍTICO DETECTADO · SUBESTACIÓN DE LABORATORIO</span>
+        </div>
+        <h2 class="hero-title">Misión Equilibrio: Rescate de la Red Nexo-3</h2>
+        <p class="hero-lead">
+          La <strong>Red Nexo-3</strong> proporciona energía a un laboratorio universitario de Electromecánica. 
+          Antes de iniciar la práctica general, los instrumentos de telemetría registraron mediciones inconsistentes y oscilaciones de tensión. 
+          Asumirás el rol de <strong>ingeniero o ingeniera en formación</strong>: deberás reconstruir el circuito trifásico, comprobar rigurosamente los cálculos analíticos y diagnosticar la anomalía antes de autorizar el restablecimiento seguro del sistema.
+        </p>
+        
+        <div class="hero-mission-box">
+          <div class="mission-icon" aria-hidden="true">⚡</div>
+          <div class="mission-text">
+            <h3>Misión Principal</h3>
+            <p>“Restaurar de forma segura el funcionamiento de la Red Nexo-3 y obtener la distinción <strong>Guardián del Equilibrio</strong>.”</p>
+          </div>
+        </div>
+
+        <div class="privacy-notice" role="note">
+          <span class="icon-shield" aria-hidden="true">🛡️</span>
+          <p><strong>Compromiso de Privacidad y Ética Digital:</strong> Esta experiencia formativa no solicita, almacena ni transmite nombres, correos ni datos personales. Cualquier certificación final se genera de forma simbólica en tu propio navegador.</p>
+        </div>
+
+        <div class="hero-cta">
+          <button id="btn-start-mission" class="btn-primary btn-lg">
+            <span class="icon" aria-hidden="true">🚀</span> Iniciar Misión
+          </button>
+          <button id="btn-view-objectives" class="btn-secondary btn-lg">
+            <span class="icon" aria-hidden="true">🎯</span> Conocer Objetivos
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Context Strip -->
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon" aria-hidden="true">🏛️</div>
+          <h4>Entorno Académico</h4>
+          <p>Asignatura: Análisis de Circuitos Eléctricos · Carrera de Electromecánica · Cuarto semestre</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon" aria-hidden="true">📐</div>
+          <h4>Eje Temático</h4>
+          <p>Sistemas trifásicos equilibrados y diagnóstico de desequilibrio en estrella (Y-Y)</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon" aria-hidden="true">⭐</div>
+          <h4>Criterio de Aprobación</h4>
+          <p>Desempeño mínimo del 80% (≥80/100 pts) superando los tres retos consecutivos</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 2: CONOCE LA MISIÓN ==================== -->
+    <section id="section-mision" class="section-panel" role="tabpanel" aria-labelledby="tab-mision" hidden>
+      <div class="section-header">
+        <h2>Contexto y Marco Formativo</h2>
+        <p class="section-desc">Diseño curricular basado en investigación, resolución de problemas y retroalimentación adaptativa.</p>
+      </div>
+
+      <div class="mission-grid">
+        <div class="card card-navy">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">📋</span> Ficha Técnica del Proyecto</h3>
+          </div>
+          <div class="card-body">
+            <ul class="meta-list">
+              <li><strong>Institución:</strong> Universidad Estatal de Milagro – UNEMI Posgrados.</li>
+              <li><strong>Asignatura:</strong> Análisis de Circuitos Eléctricos.</li>
+              <li><strong>Carrera:</strong> Electromecánica (Cuarto Semestre).</li>
+              <li><strong>Unidad y Tema:</strong> Sistemas trifásicos equilibrados · Conexión Y-Y.</li>
+              <li><strong>Público:</strong> Estudiantes con conocimientos previos de corriente alterna, números complejos, trigonometría y leyes de Kirchhoff.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-navy">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">🎯</span> Objetivo de Aprendizaje</h3>
+          </div>
+          <div class="card-body">
+            <p class="highlight-text">
+              Resolver y validar, con un desempeño mínimo del <strong>80 % (80/100 puntos)</strong>, tres situaciones progresivas de una conexión trifásica Y-Y mediante:
+            </p>
+            <ol class="steps-list">
+              <li>Identificación topológica de componentes y secuencias de fase.</li>
+              <li>Cálculo preciso de voltajes, corrientes y verificación del conductor neutro (I<sub>N</sub> = 0 A).</li>
+              <li>Comparación teórico-simulada y diagnóstico del retorno de corriente por desequilibrio.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="card card-navy">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">🧩</span> El Problema Educativo</h3>
+          </div>
+          <div class="card-body">
+            <p>Es común memorizar fórmulas pero tropezar al aplicarlas en una red física real:</p>
+            <ul class="problem-list">
+              <li>Confundir magnitudes de fase (V<sub>φ</sub>, I<sub>φ</sub>) y de línea (V<sub>L</sub>, I<sub>L</sub>).</li>
+              <li>Omitir unidades reglamentarias o confundir prefijos.</li>
+              <li>Dificultad para descomponer y sumar vectores desfasados 120°.</li>
+              <li>Cometer errores críticos como desconectar el neutro con cargas desbalanceadas.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card card-navy card-evaluation-full">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">🏅</span> Sistema de Evaluación y Logro</h3>
+          </div>
+          <div class="card-body">
+            <div class="thresholds-summary">
+              <div class="th-item">
+                <span class="th-name">Nivel 1: Mapa</span>
+                <span class="th-val">15 / 20 pts</span>
+              </div>
+              <div class="th-item">
+                <span class="th-name">Nivel 2: Cálculo</span>
+                <span class="th-val">26 / 35 pts</span>
+              </div>
+              <div class="th-item">
+                <span class="th-name">Nivel 3: Diagnóstico</span>
+                <span class="th-val">34 / 45 pts</span>
+              </div>
+            </div>
+            <p class="th-note"><strong>Regla de Intentos:</strong> Dispones de 3 intentos por ejercicio. El 1.º otorga el 100% del puntaje, el 2.º el 80% y el 3.º el 60%. ¡Conserva siempre tu mejor puntuación alcanzada!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-footer">
+        <button class="btn-primary btn-goto-resources">
+          Continuar a Centro de Preparación <span aria-hidden="true">➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 3: RECURSOS EDUCATIVOS ==================== -->
+    <section id="section-recursos" class="section-panel" role="tabpanel" aria-labelledby="tab-recursos" hidden>
+      <div class="section-header">
+        <div class="flex-between">
+          <div>
+            <h2>Centro de Preparación: Recursos Educativos</h2>
+            <p class="section-desc">Revisa los cuatro recursos digitales antes de iniciar la simulación. Puedes abrir la vista integrada o visitarlos en pestaña nueva.</p>
+          </div>
+          <div class="progress-box">
+            <span class="progress-label">Recursos revisados:</span>
+            <span id="resources-counter" class="progress-count">0 / 4</span>
+            <div class="progress-bar-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="4" id="resources-progress-bar">
+              <div class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 Resource Cards -->
+      <div class="resources-grid">
+        <!-- Resource 1 -->
+        <article class="resource-card" id="res-card-1">
+          <div class="res-card-top">
+            <span class="res-tag video">Video Explicativo</span>
+            <span class="res-tool">NotebookLM</span>
+          </div>
+          <h3 class="res-title">De la onda al fasor: parámetros de una señal alterna</h3>
+          <p class="res-desc">Fundamentos de señales sinusoidales, valor RMS, frecuencia angular (ω = 2π·f), desfase temporal y su representación fasorial en el plano complejo.</p>
+          <div class="res-ai-badge">
+            <span class="icon" aria-hidden="true">✨</span>
+            <span>Generado y enriquecido con IA (NotebookLM) para síntesis conceptual y audio analítico.</span>
+          </div>
+          <div class="res-actions">
+            <button class="btn-primary btn-sm btn-open-resource" data-resource-id="1">
+              Ver video
+            </button>
+            <a href="https://notebook.google.com/notebook/a31ed613-5d51-491f-802a-4beb6a6c469b/artifact/b11184cc-04ca-4955-bf21-97904e0d8878?utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1" 
+               target="_blank" rel="noopener noreferrer" class="btn-link btn-sm" title="Abrir en pestaña nueva">
+              Abrir en nueva pestaña ↗
+            </a>
+          </div>
+
+          <!-- Quick Check Activity -->
+          <div class="res-quiz" id="quiz-res-1">
+            <h4><span class="icon" aria-hidden="true">📝</span> Comprobación Rápida</h4>
+            <p class="quiz-question">Si una señal alterna de 60 Hz tiene un valor RMS de 120 V, ¿cuál es su amplitud máxima de cresta?</p>
+            <div class="quiz-options">
+              <label class="radio-label">
+                <input type="radio" name="quiz1" value="A"> 120 V
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz1" value="B"> ≈ 169,7 V (120 × √2)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz1" value="C"> 207,85 V
+              </label>
+            </div>
+            <button class="btn-secondary btn-xs btn-check-quiz" data-quiz-id="1">Validar comprobación</button>
+            <div class="quiz-feedback" id="quiz-feedback-1" aria-live="polite"></div>
+          </div>
+          <div class="res-status-toggle">
+            <label class="checkbox-label">
+              <input type="checkbox" class="chk-res-reviewed" data-resource-id="1" id="chk-res-1">
+              Marcar recurso como revisado
+            </label>
+          </div>
+        </article>
+
+        <!-- Resource 2 -->
+        <article class="resource-card" id="res-card-2">
+          <div class="res-card-top">
+            <span class="res-tag info">Infografía</span>
+            <span class="res-tool">NotebookLM</span>
+          </div>
+          <h3 class="res-title">Fasores trifásicos: secuencias ABC y ACB</h3>
+          <p class="res-desc">Diferenciación geométrica entre secuencia positiva (ABC) y negativa (ACB), desfase simétrico de 120° y repercusiones en el sentido de giro electromecánico.</p>
+          <div class="res-ai-badge">
+            <span class="icon" aria-hidden="true">✨</span>
+            <span>Estructuración didáctica y comparativa fasorial asistida por IA generativa.</span>
+          </div>
+          <div class="res-actions">
+            <button class="btn-primary btn-sm btn-open-resource" data-resource-id="2">
+              Ver infografía
+            </button>
+            <a href="https://notebook.google.com/notebook/a31ed613-5d51-491f-802a-4beb6a6c469b/artifact/d95668b8-3e22-40dd-91e5-fc2fd27c656f?utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1" 
+               target="_blank" rel="noopener noreferrer" class="btn-link btn-sm">
+              Abrir en nueva pestaña ↗
+            </a>
+          </div>
+
+          <!-- Quick Check Activity -->
+          <div class="res-quiz" id="quiz-res-2">
+            <h4><span class="icon" aria-hidden="true">📝</span> Comprobación Rápida</h4>
+            <p class="quiz-question">En una secuencia directa o positiva ABC con V<sub>A</sub> = 120∠0° V, ¿cuál es el ángulo de fase de V<sub>B</sub>?</p>
+            <div class="quiz-options">
+              <label class="radio-label">
+                <input type="radio" name="quiz2" value="A"> +120°
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz2" value="B"> -120° (o +240°)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz2" value="C"> 0°
+              </label>
+            </div>
+            <button class="btn-secondary btn-xs btn-check-quiz" data-quiz-id="2">Validar comprobación</button>
+            <div class="quiz-feedback" id="quiz-feedback-2" aria-live="polite"></div>
+          </div>
+          <div class="res-status-toggle">
+            <label class="checkbox-label">
+              <input type="checkbox" class="chk-res-reviewed" data-resource-id="2" id="chk-res-2">
+              Marcar recurso como revisado
+            </label>
+          </div>
+        </article>
+
+        <!-- Resource 3 -->
+        <article class="resource-card" id="res-card-3">
+          <div class="res-card-top">
+            <span class="res-tag audio">Micropódcast</span>
+            <span class="res-tool">NotebookLM</span>
+          </div>
+          <h3 class="res-title">Conexión trifásica Y-Y equilibrada: voltajes, corrientes y neutro</h3>
+          <p class="res-desc">Análisis guiado sobre por qué V<sub>L</sub> = √3 · V<sub>φ</sub>, la identidad I<sub>L</sub> = I<sub>φ</sub>, y la demostración fasorial de que la corriente de retorno por el neutro es exactamente cero (I<sub>N</sub> = 0 A).</p>
+          <div class="res-ai-badge">
+            <span class="icon" aria-hidden="true">✨</span>
+            <span>Conversación socrática sintetizada con audio IA de NotebookLM.</span>
+          </div>
+          <div class="res-actions">
+            <button class="btn-primary btn-sm btn-open-resource" data-resource-id="3">
+              Escuchar micropódcast
+            </button>
+            <a href="https://notebook.google.com/notebook/ba90f627-4460-4662-a4fc-c8496aaba4b0/artifact/1eeacf63-a3d7-4554-a587-4fe141b9f4a4?utm_content=&utm_smc=nlm_web_share_google_oo_art_share_1" 
+               target="_blank" rel="noopener noreferrer" class="btn-link btn-sm">
+              Abrir en nueva pestaña ↗
+            </a>
+          </div>
+
+          <!-- Quick Check Activity -->
+          <div class="res-quiz" id="quiz-res-3">
+            <h4><span class="icon" aria-hidden="true">📝</span> Comprobación Rápida</h4>
+            <p class="quiz-question">¿Por qué la corriente por el neutro I<sub>N</sub> es cero en una carga resistiva equilibrada conectada en estrella?</p>
+            <div class="quiz-options">
+              <label class="radio-label">
+                <input type="radio" name="quiz3" value="A"> Porque no hay conductor neutro conectado físicamente.
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz3" value="B"> Porque la suma fasorial de tres corrientes iguales desfasadas 120° es nula.
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz3" value="C"> Porque las resistencias bloquean el retorno de la corriente.
+              </label>
+            </div>
+            <button class="btn-secondary btn-xs btn-check-quiz" data-quiz-id="3">Validar comprobación</button>
+            <div class="quiz-feedback" id="quiz-feedback-3" aria-live="polite"></div>
+          </div>
+          <div class="res-status-toggle">
+            <label class="checkbox-label">
+              <input type="checkbox" class="chk-res-reviewed" data-resource-id="3" id="chk-res-3">
+              Marcar recurso como revisado
+            </label>
+          </div>
+        </article>
+
+        <!-- Resource 4 -->
+        <article class="resource-card" id="res-card-4">
+          <div class="res-card-top">
+            <span class="res-tag lab">Laboratorio Interactivo</span>
+            <span class="res-tool">Genially & NotebookLM</span>
+          </div>
+          <h3 class="res-title">Laboratorio interactivo: simulación de una conexión trifásica Y-Y equilibrada</h3>
+          <p class="res-desc">Entorno navegable con simulación de parámetros de 120 V / 12 Ω, tabla comparativa de resultados teórico-simulados y autoevaluación sumativa de cinco preguntas.</p>
+          <div class="res-ai-badge">
+            <span class="icon" aria-hidden="true">✨</span>
+            <span>Recurso interactivo multimedia diseñado por los integrantes del Grupo N.º 4 para experimentación directa.</span>
+          </div>
+          <div class="res-actions">
+            <button class="btn-primary btn-sm btn-open-resource" data-resource-id="4">
+              Abrir Laboratorio Genially
+            </button>
+            <a href="https://view.genially.com/6a867185fa694738e3ec6bcc" 
+               target="_blank" rel="noopener noreferrer" class="btn-link btn-sm">
+              Abrir en nueva pestaña ↗
+            </a>
+          </div>
+
+          <!-- Quick Check Activity -->
+          <div class="res-quiz" id="quiz-res-4">
+            <h4><span class="icon" aria-hidden="true">📝</span> Comprobación Rápida</h4>
+            <p class="quiz-question">Con V<sub>φ</sub> = 120 V y R<sub>φ</sub> = 12 Ω, ¿cuál es el voltaje de línea V<sub>L</sub> y la corriente de línea I<sub>L</sub>?</p>
+            <div class="quiz-options">
+              <label class="radio-label">
+                <input type="radio" name="quiz4" value="A"> V<sub>L</sub> = 120 V, I<sub>L</sub> = 10 A
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz4" value="B"> V<sub>L</sub> = 207,85 V, I<sub>L</sub> = 10 A
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="quiz4" value="C"> V<sub>L</sub> = 207,85 V, I<sub>L</sub> = 17,32 A
+              </label>
+            </div>
+            <button class="btn-secondary btn-xs btn-check-quiz" data-quiz-id="4">Validar comprobación</button>
+            <div class="quiz-feedback" id="quiz-feedback-4" aria-live="polite"></div>
+          </div>
+          <div class="res-status-toggle">
+            <label class="checkbox-label">
+              <input type="checkbox" class="chk-res-reviewed" data-resource-id="4" id="chk-res-4">
+              Marcar recurso como revisado
+            </label>
+          </div>
+        </article>
+      </div>
+
+      <div class="action-footer">
+        <button class="btn-primary btn-goto-game">
+          ¡Preparación lista! Comenzar los Retos Gamificados <span aria-hidden="true">➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 4: PRACTICA Y JUEGA (MISIÓN GAMIFICADA) ==================== -->
+    <section id="section-juego" class="section-panel" role="tabpanel" aria-labelledby="tab-juego" hidden>
+      
+      <!-- GAMIFICATION HUD (Heads-Up Display) -->
+      <div class="game-hud" role="region" aria-label="Tablero de Estado de la Red Nexo-3">
+        <div class="hud-item hud-energy">
+          <div class="hud-label">
+            <span>⚡ ESTADO DE LA RED</span>
+            <span id="hud-energy-text">100% ESTABLE</span>
+          </div>
+          <div class="energy-track">
+            <div id="hud-energy-bar" class="energy-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="hud-item hud-score">
+          <span class="hud-label">PUNTUACIÓN GLOBAL</span>
+          <div class="hud-score-value">
+            <span id="hud-total-score">0.0</span> <small>/ 100</small>
+          </div>
+        </div>
+
+        <div class="hud-item hud-badges">
+          <span class="hud-label">INSIGNIAS OBTENIDAS</span>
+          <div class="badges-row" id="hud-badges-container">
+            <span class="badge-slot locked" id="slot-badge-1" title="Insignia Nivel 1: Explorador Y-Y">🔒 Explorador Y-Y</span>
+            <span class="badge-slot locked" id="slot-badge-2" title="Insignia Nivel 2: Analista Fasorial">🔒 Analista Fasorial</span>
+            <span class="badge-slot locked" id="slot-badge-3" title="Insignia Nivel 3: Guardián del Equilibrio">🔒 Guardián</span>
+          </div>
+        </div>
+
+        <div class="hud-item hud-level-nav">
+          <span class="hud-label">RETO EN CURSO</span>
+          <div class="level-pills" role="tablist" aria-label="Selector de nivel">
+            <button class="level-pill active" id="btn-lvl-1" role="tab" aria-selected="true">Nivel 1</button>
+            <button class="level-pill locked" id="btn-lvl-2" role="tab" aria-selected="false" disabled>Nivel 2 🔒</button>
+            <button class="level-pill locked" id="btn-lvl-3" role="tab" aria-selected="false" disabled>Nivel 3 🔒</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= NIVEL 1: MAPA DE LA RED ================= -->
+      <div id="level-container-1" class="level-card active" role="tabpanel" aria-labelledby="btn-lvl-1">
+        <div class="level-header">
+          <div class="level-badge">RETO 1 · VALOR: 20 PUNTOS · UMBRAL DE APROBACIÓN: 15 PUNTOS</div>
+          <h3 class="level-title">Mapa de la Red: Identificación Topológica del Sistema Y-Y</h3>
+          <p class="level-instructions">
+            Inspecciona el esquema de telemetría de la Red Nexo-3. Debes ubicar e identificar correctamente los <strong>8 componentes fundamentales</strong> del circuito (2 pts c/u = 16 pts) y responder la pregunta de secuencia de fases (4 pts).
+          </p>
+        </div>
+
+        <!-- Circuit SVG View & Interactive Targets -->
+        <div class="circuit-workspace">
+          <div class="svg-diagram-card">
+            <div class="diagram-toolbar">
+              <span class="tag-live">ESQUEMA ELÉCTRICO TRIFÁSICO Y-Y</span>
+              <button class="btn-xs btn-secondary" id="btn-svg-reset-zoom">Restablecer vista</button>
+            </div>
+            
+            <!-- Embed Interactive Circuit SVG -->
+            <div class="svg-embed-wrapper" id="circuit-svg-container" tabindex="0" aria-label="Diagrama esquemático interactivo de circuito trifásico Y-Y">
+              <!-- Inline accessible SVG loaded by game.js -->
+            </div>
+            <p class="diagram-caption">
+              Figura 1: Topología trifásica en estrella Y-Y con fuente en estrella, neutros Ns y NL, líneas A-B-C y carga resistiva.
+            </p>
+          </div>
+
+          <!-- Component Identification Matching Area -->
+          <div class="identification-panel">
+            <h4><span class="icon" aria-hidden="true">🏷️</span> Identificación de Elementos (16 pts)</h4>
+            <p class="panel-hint">Selecciona el nombre correcto para cada punto de prueba señalado en el diagrama. También puedes usar los selectores accesibles:</p>
+
+            <form id="form-level-1" class="matching-form" onsubmit="return false;">
+              <!-- 8 Target Selectors -->
+              <div class="form-row-ident" data-target="fuente">
+                <label for="sel-ident-1">1. Generador trifásico (Ns, terminales de fase):</label>
+                <select id="sel-ident-1" class="form-select ident-select" data-id="fuente" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-1" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="carga">
+                <label for="sel-ident-2">2. Receptores resistivos conectados a NL:</label>
+                <select id="sel-ident-2" class="form-select ident-select" data-id="carga" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-2" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="lineas">
+                <label for="sel-ident-3">3. Vías de transmisión principales A, B y C:</label>
+                <select id="sel-ident-3" class="form-select ident-select" data-id="lineas" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-3" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="neutro">
+                <label for="sel-ident-4">4. Enlace común entre nodos neutros Ns y NL:</label>
+                <select id="sel-ident-4" class="form-select ident-select" data-id="neutro" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-4" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="v_fase">
+                <label for="sel-ident-5">5. Potencial medido entre un terminal de fase y su neutro:</label>
+                <select id="sel-ident-5" class="form-select ident-select" data-id="v_fase" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-5" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="v_linea">
+                <label for="sel-ident-6">6. Diferencia de potencial entre dos conductores de fase (ej. A-B):</label>
+                <select id="sel-ident-6" class="form-select ident-select" data-id="v_linea" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-6" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="i_fase">
+                <label for="sel-ident-7">7. Flujo de corriente que atraviesa directamente la impedancia de una fase:</label>
+                <select id="sel-ident-7" class="form-select ident-select" data-id="i_fase" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-7" aria-live="polite"></span>
+              </div>
+
+              <div class="form-row-ident" data-target="i_linea">
+                <label for="sel-ident-8">8. Corriente conducida por los conductores de línea:</label>
+                <select id="sel-ident-8" class="form-select ident-select" data-id="i_linea" required>
+                  <option value="">-- Seleccionar componente --</option>
+                  <option value="fuente">Fuente conectada en estrella (Y)</option>
+                  <option value="carga">Carga conectada en estrella (Y)</option>
+                  <option value="lineas">Conductores de fase A-B-C</option>
+                  <option value="neutro">Conductor neutro Ns-NL</option>
+                  <option value="v_fase">Voltaje de fase Vφ</option>
+                  <option value="v_linea">Voltaje de línea VL</option>
+                  <option value="i_fase">Corriente de fase Iφ</option>
+                  <option value="i_linea">Corriente de línea IL</option>
+                </select>
+                <span class="item-status" id="stat-ident-8" aria-live="polite"></span>
+              </div>
+
+              <!-- Question: Phase Sequence (4 pts) -->
+              <div class="question-box-l1">
+                <h4><span class="icon" aria-hidden="true">🔄</span> Análisis de Secuencia de Fases (4 pts)</h4>
+                <p>Las fuentes de la Red Nexo-3 se encuentran desfasadas con los siguientes ángulos: V<sub>A</sub> = 120∠0° V, V<sub>B</sub> = 120∠-120° V, V<sub>C</sub> = 120∠+120° V.</p>
+                <p><strong>¿A qué secuencia de fases corresponde este sistema y cuál es su justificación técnica basada en el desplazamiento de 120°?</strong></p>
+                
+                <div class="radio-group-vertical">
+                  <label class="radio-card">
+                    <input type="radio" name="rad-secuencia" value="ACB">
+                    <div class="radio-card-content">
+                      <strong>Secuencia Inversa (ACB):</strong>
+                      <span>La fase C adelanta en 120° a la fase B, por lo que las tensiones alcanzan su valor máximo en el orden A, C, B.</span>
+                    </div>
+                  </label>
+
+                  <label class="radio-card">
+                    <input type="radio" name="rad-secuencia" value="ABC">
+                    <div class="radio-card-content">
+                      <strong>Secuencia Directa o Positiva (ABC):</strong>
+                      <span>La fase A pasa por su máximo primero (0°), seguida por la fase B con un retraso angular de 120° (-120°), y finalmente la fase C con otro retraso de 120° (-240° ≡ +120°).</span>
+                    </div>
+                  </label>
+
+                  <label class="radio-card">
+                    <input type="radio" name="rad-secuencia" value="CERO">
+                    <div class="radio-card-content">
+                      <strong>Secuencia Homopolar o Cero:</strong>
+                      <span>Todas las fases oscilan en fase sin desplazamiento angular entre sí.</span>
+                    </div>
+                  </label>
+                </div>
+                <span class="item-status" id="stat-secuencia" aria-live="polite"></span>
+              </div>
+
+              <!-- Submission & Feedback Buttons -->
+              <div class="level-actions">
+                <button type="button" id="btn-validate-l1" class="btn-primary btn-md">
+                  <span class="icon" aria-hidden="true">✓</span> Validar Nivel 1
+                </button>
+                <button type="button" id="btn-ask-tutor-l1" class="btn-secondary btn-md">
+                  <span class="icon" aria-hidden="true">🤖</span> Pedir Orientación a IA-Fasor
+                </button>
+                <div class="level-attempts" id="attempts-l1" aria-live="polite">
+                  Intentos utilizados: 0 / 3
+                </div>
+              </div>
+
+              <div id="feedback-l1" class="feedback-banner hidden" role="alert"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= NIVEL 2: CÁLCULO BAJO PRESIÓN ================= -->
+      <div id="level-container-2" class="level-card" role="tabpanel" aria-labelledby="btn-lvl-2" hidden>
+        <div class="level-header">
+          <div class="level-badge">RETO 2 · VALOR: 35 PUNTOS · UMBRAL DE APROBACIÓN: 26 PUNTOS</div>
+          <h3 class="level-title">Cálculo bajo Presión: Magnitudes en Conexión Y-Y Equilibrada</h3>
+          <p class="level-instructions">
+            La telemetría confirma que las ramas de carga del laboratorio son idénticas y puramente resistivas:
+            V<sub>φ</sub> = 120 V RMS, f = 60 Hz, R<sub>A</sub> = R<sub>B</sub> = R<sub>C</sub> = 12 Ω, desfasadas a 0°, -120° y +120°.
+            Determina las magnitudes eléctricas (20 pts), ordena el procedimiento analítico (10 pts) e interpreta la concordancia teórico-simulada (5 pts).
+          </p>
+        </div>
+
+        <div class="calc-grid">
+          <!-- Form Magnitudes (20 pts) -->
+          <div class="card card-inner">
+            <h4><span class="icon" aria-hidden="true">⚡</span> 1. Cálculo de Magnitudes Eléctricas (20 pts · 5 pts c/u)</h4>
+            <p class="card-hint">Ingresa tus respuestas numéricas. Puedes utilizar coma o punto decimal (tolerancia admitida: ±1 %; para I<sub>N</sub> tolerancia absoluta ±0,05 A).</p>
+
+            <div class="input-grid">
+              <div class="input-field">
+                <label for="inp-vl">Voltaje de línea (V<sub>L</sub>):</label>
+                <div class="input-group">
+                  <input type="text" id="inp-vl" class="form-control" placeholder="Ej: 207.85" autocomplete="off" required>
+                  <span class="unit-addon">V</span>
+                </div>
+                <span class="field-feedback" id="fb-vl"></span>
+              </div>
+
+              <div class="input-field">
+                <label for="inp-ifase">Corriente de fase (I<sub>φ</sub>):</label>
+                <div class="input-group">
+                  <input type="text" id="inp-ifase" class="form-control" placeholder="Ej: 10" autocomplete="off" required>
+                  <span class="unit-addon">A</span>
+                </div>
+                <span class="field-feedback" id="fb-ifase"></span>
+              </div>
+
+              <div class="input-field">
+                <label for="inp-ilinea">Corriente de línea (I<sub>L</sub>):</label>
+                <div class="input-group">
+                  <input type="text" id="inp-ilinea" class="form-control" placeholder="Ej: 10" autocomplete="off" required>
+                  <span class="unit-addon">A</span>
+                </div>
+                <span class="field-feedback" id="fb-ilinea"></span>
+              </div>
+
+              <div class="input-field">
+                <label for="inp-ineutro">Corriente en el conductor neutro (I<sub>N</sub>):</label>
+                <div class="input-group">
+                  <input type="text" id="inp-ineutro" class="form-control" placeholder="Ej: 0" autocomplete="off" required>
+                  <span class="unit-addon">A</span>
+                </div>
+                <span class="field-feedback" id="fb-ineutro"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Animated Phasor Canvas & Controls -->
+          <div class="card card-inner">
+            <div class="flex-between">
+              <h4><span class="icon" aria-hidden="true">🧭</span> Diagrama Fasorial Dinámico a 120°</h4>
+              <div class="phasor-controls">
+                <button type="button" id="btn-phasor-toggle" class="btn-xs btn-secondary" title="Pausar o reanudar rotación">
+                  ⏸ Pausar
+                </button>
+              </div>
+            </div>
+            <div class="canvas-container">
+              <canvas id="canvas-phasor" width="400" height="300" aria-label="Diagrama fasorial animado mostrando tres fasores de corriente y tensión desfasados a 0, -120 y 120 grados"></canvas>
+            </div>
+            <p class="canvas-note">Observa cómo la suma de fasores de corriente I⃗<sub>A</sub> + I⃗<sub>B</sub> + I⃗<sub>C</sub> cierra un triángulo simétrico perfecto con centro en el origen.</p>
+          </div>
+        </div>
+
+        <!-- Procedure Ordering (10 pts) -->
+        <div class="card card-inner mt-4">
+          <h4><span class="icon" aria-hidden="true">🔢</span> 2. Ordenamiento Metodológico del Procedimiento (10 pts)</h4>
+          <p class="card-hint">Selecciona el orden correcto (del 1 al 5) para cada una de las siguientes etapas en el análisis de una red Y-Y equilibrada:</p>
+          
+          <div class="procedure-list" id="procedure-container">
+            <div class="proc-item" data-step="1">
+              <label for="order-step-ident">Identificar los valores de voltaje de fase V<sub>φ</sub> y resistencia de fase R<sub>φ</sub>:</label>
+              <select id="order-step-ident" class="form-select proc-select" data-step-id="ident">
+                <option value="">Paso #</option>
+                <option value="1">1.º Paso</option>
+                <option value="2">2.º Paso</option>
+                <option value="3">3.º Paso</option>
+                <option value="4">4.º Paso</option>
+                <option value="5">5.º Paso</option>
+              </select>
+            </div>
+
+            <div class="proc-item" data-step="2">
+              <label for="order-step-ifase">Calcular la corriente de fase mediante la Ley de Ohm (I<sub>φ</sub> = V<sub>φ</sub> / R<sub>φ</sub>):</label>
+              <select id="order-step-ifase" class="form-select proc-select" data-step-id="ifase">
+                <option value="">Paso #</option>
+                <option value="1">1.º Paso</option>
+                <option value="2">2.º Paso</option>
+                <option value="3">3.º Paso</option>
+                <option value="4">4.º Paso</option>
+                <option value="5">5.º Paso</option>
+              </select>
+            </div>
+
+            <div class="proc-item" data-step="3">
+              <label for="order-step-ilinea">Aplicar la igualdad de corrientes en conexión estrella (I<sub>L</sub> = I<sub>φ</sub>):</label>
+              <select id="order-step-ilinea" class="form-select proc-select" data-step-id="ilinea">
+                <option value="">Paso #</option>
+                <option value="1">1.º Paso</option>
+                <option value="2">2.º Paso</option>
+                <option value="3">3.º Paso</option>
+                <option value="4">4.º Paso</option>
+                <option value="5">5.º Paso</option>
+              </select>
+            </div>
+
+            <div class="proc-item" data-step="4">
+              <label for="order-step-vlinea">Calcular el voltaje de línea mediante la relación V<sub>L</sub> = √3 · V<sub>φ</sub>:</label>
+              <select id="order-step-vlinea" class="form-select proc-select" data-step-id="vlinea">
+                <option value="">Paso #</option>
+                <option value="1">1.º Paso</option>
+                <option value="2">2.º Paso</option>
+                <option value="3">3.º Paso</option>
+                <option value="4">4.º Paso</option>
+                <option value="5">5.º Paso</option>
+              </select>
+            </div>
+
+            <div class="proc-item" data-step="5">
+              <label for="order-step-neutro">Verificar mediante balance fasorial que I<sub>N</sub> = 0 A en carga equilibrada:</label>
+              <select id="order-step-neutro" class="form-select proc-select" data-step-id="neutro">
+                <option value="">Paso #</option>
+                <option value="1">1.º Paso</option>
+                <option value="2">2.º Paso</option>
+                <option value="3">3.º Paso</option>
+                <option value="4">4.º Paso</option>
+                <option value="5">5.º Paso</option>
+              </select>
+            </div>
+          </div>
+          <span class="item-status" id="stat-procedure" aria-live="polite"></span>
+        </div>
+
+        <!-- Interpretation: Theoretical vs Simulated (5 pts) -->
+        <div class="card card-inner mt-4">
+          <h4><span class="icon" aria-hidden="true">📊</span> 3. Interpretación Teórico-Simulada (5 pts)</h4>
+          <p>Durante la simulación de laboratorio en el software Genially, el voltímetro virtual marcó V<sub>L</sub> = 207,8 V frente al cálculo analítico de 207,846 V (diferencia porcentual de 0,02 % < 1 %).</p>
+          <p><strong>¿Qué representa técnicamente este resultado para el informe de laboratorio?</strong></p>
+
+          <div class="radio-group-vertical">
+            <label class="radio-card">
+              <input type="radio" name="rad-interp-l2" value="valido">
+              <div class="radio-card-content">
+                <strong>Concordancia satisfactoria dentro de la tolerancia admitida (±1 %):</strong>
+                <span>La desviación es atribuible únicamente al redondeo de visualización instrumental; el modelo matemático y la simulación presentan concordancia dentro de la tolerancia establecida.</span>
+              </div>
+            </label>
+
+            <label class="radio-card">
+              <input type="radio" name="rad-interp-l2" value="invalido">
+              <div class="radio-card-content">
+                <strong>Falla crítica de simulación:</strong>
+                <span>Cualquier diferencia, por diminuta que sea, invalida los cálculos y requiere recalibrar la fuente.</span>
+              </div>
+            </label>
+
+            <label class="radio-card">
+              <input type="radio" name="rad-interp-l2" value="fase">
+              <div class="radio-card-content">
+                <strong>Desfase inductivo imprevisto:</strong>
+                <span>La diferencia demuestra que las resistencias tienen un componente capacitivo oculto.</span>
+              </div>
+            </label>
+          </div>
+          <span class="item-status" id="stat-interp-l2" aria-live="polite"></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="level-actions">
+          <button type="button" id="btn-validate-l2" class="btn-primary btn-md">
+            <span class="icon" aria-hidden="true">✓</span> Validar Nivel 2
+          </button>
+          <button type="button" id="btn-ask-tutor-l2" class="btn-secondary btn-md">
+            <span class="icon" aria-hidden="true">🤖</span> Pedir Orientación a IA-Fasor
+          </button>
+          <div class="level-attempts" id="attempts-l2" aria-live="polite">
+            Intentos utilizados: 0 / 3
+          </div>
+        </div>
+
+        <div id="feedback-l2" class="feedback-banner hidden" role="alert"></div>
+      </div>
+
+      <!-- ================= NIVEL 3: DIAGNÓSTICO DE LA ANOMALÍA ================= -->
+      <div id="level-container-3" class="level-card" role="tabpanel" aria-labelledby="btn-lvl-3" hidden>
+        <div class="level-header">
+          <div class="level-badge critical">RETO FINAL · VALOR: 45 PUNTOS · UMBRAL DE APROBACIÓN: 34 PUNTOS</div>
+          <h3 class="level-title">Diagnóstico de la Anomalía: Rescate y Seguridad de la Red Nexo-3</h3>
+          <p class="level-instructions">
+            ¡Alerta en la sala de control! El técnico de turno sustituyó de urgencia varias resistencias quemadas con piezas no calibradas. 
+            El banco de carga ahora presenta impedancias asimétricas:
+            V<sub>φ</sub> = 120 V, R<sub>A</sub> = 12 Ω, R<sub>B</sub> = 15 Ω, R<sub>C</sub> = 10 Ω.
+            Debes calcular las corrientes (18 pts), interpretar la suma fasorial del neutro (12 pts), emitir el diagnóstico técnico (8 pts) y determinar la acción correctiva segura (7 pts).
+          </p>
+        </div>
+
+        <!-- 1. Calculations in Unbalanced Load (18 pts) -->
+        <div class="card card-inner">
+          <h4><span class="icon" aria-hidden="true">📐</span> 1. Cálculo de Corrientes con Carga Desequilibrada (18 pts)</h4>
+          <p class="card-hint">Calcula la magnitud RMS de las corrientes en cada fase y en el conductor neutro (V<sub>φ</sub> = 120 V):</p>
+
+          <div class="input-grid">
+            <div class="input-field">
+              <label for="inp-ia">Corriente fase A (I<sub>A</sub> = 120/12):</label>
+              <div class="input-group">
+                <input type="text" id="inp-ia" class="form-control" placeholder="Ej: 10" autocomplete="off" required>
+                <span class="unit-addon">A</span>
+              </div>
+              <span class="field-feedback" id="fb-ia"></span>
+            </div>
+
+            <div class="input-field">
+              <label for="inp-ib">Corriente fase B (I<sub>B</sub> = 120/15):</label>
+              <div class="input-group">
+                <input type="text" id="inp-ib" class="form-control" placeholder="Ej: 8" autocomplete="off" required>
+                <span class="unit-addon">A</span>
+              </div>
+              <span class="field-feedback" id="fb-ib"></span>
+            </div>
+
+            <div class="input-field">
+              <label for="inp-ic">Corriente fase C (I<sub>C</sub> = 120/10):</label>
+              <div class="input-group">
+                <input type="text" id="inp-ic" class="form-control" placeholder="Ej: 12" autocomplete="off" required>
+                <span class="unit-addon">A</span>
+              </div>
+              <span class="field-feedback" id="fb-ic"></span>
+            </div>
+
+            <div class="input-field">
+              <label for="inp-in-unbal">Magnitud corriente en neutro (|I<sub>N</sub>|):</label>
+              <div class="input-group">
+                <input type="text" id="inp-in-unbal" class="form-control" placeholder="Ej: 3.46" autocomplete="off" required>
+                <span class="unit-addon">A</span>
+              </div>
+              <span class="field-feedback" id="fb-in-unbal"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Phasor Interpretation (12 pts) -->
+        <div class="card card-inner mt-4">
+          <h4><span class="icon" aria-hidden="true">🧭</span> 2. Interpretación Fasorial del Desequilibrio (12 pts)</h4>
+          <p>Considerando los fasores de corriente I⃗<sub>A</sub> = 10∠0° A, I⃗<sub>B</sub> = 8∠-120° A e I⃗<sub>C</sub> = 12∠120° A, ¿cuál es la razón físico-matemática por la que circula corriente por el neutro?</p>
+
+          <div class="radio-group-vertical">
+            <label class="radio-card">
+              <input type="radio" name="rad-fasor-l3" value="vectorial">
+              <div class="radio-card-content">
+                <strong>Ruptura de la simetría fasorial (∑ I⃗ ≠ 0):</strong>
+                <span>Al tener magnitudes desiguales (10 A, 8 A y 12 A), la descomposición vectorial en ejes real e imaginario ya no se anula mutually: (10 - 4 - 6) + j(0 - 6,93 + 10,39) = 0 + j3,46 A. El conductor neutro transporta ese exceso para mantener el nodo en cero voltios.</span>
+              </div>
+            </label>
+
+            <label class="radio-card">
+              <input type="radio" name="rad-fasor-l3" value="frecuencia">
+              <div class="radio-card-content">
+                <strong>Cambio en la frecuencia del generador:</strong>
+                <span>Las diferentes resistencias alteran la frecuencia de cada fase haciendo que la onda de neutro viaje a 180 Hz.</span>
+              </div>
+            </label>
+
+            <label class="radio-card">
+              <input type="radio" name="rad-fasor-l3" value="cortocircuito">
+              <div class="radio-card-content">
+                <strong>Falso cortocircuito a tierra:</strong>
+                <span>El neutro sólo conduce corriente si una de las fases toca directamente la carcasa metálica del generador.</span>
+              </div>
+            </label>
+          </div>
+          <span class="item-status" id="stat-fasor-l3" aria-live="polite"></span>
+        </div>
+
+        <!-- 3. Technical Diagnosis (8 pts) -->
+        <div class="card card-inner mt-4">
+          <h4><span class="icon" aria-hidden="true">🔍</span> 3. Diagnóstico Técnico de la Red Nexo-3 (8 pts)</h4>
+          <p>¿Cuál es la causa raíz de las mediciones oscilantes y del disparo de advertencia detectado en la subestación del laboratorio universitario?</p>
+
+          <div class="radio-group-vertical">
+            <label class="radio-card">
+              <input type="radio" name="rad-diag-l3" value="desequilibrio">
+              <div class="radio-card-content">
+                <strong>Desequilibrio severo de impedancias de carga:</strong>
+                <span>Las fases operan con demandas desiguales (12 Ω, 15 Ω, 10 Ω), forzando una corriente de retorno de 3,46 A por el neutro y creando riesgos térmicos y desbalance de cargas.</span>
+              </div>
+            </label>
+
+            <label class="radio-card">
+              <input type="radio" name="rad-diag-l3" value="fase_abierta">
+              <div class="radio-card-content">
+                <strong>Fase completamente abierta o desconectada:</strong>
+                <span>Una de las fases no tiene continuidad eléctrica con la fuente.</span>
+              </div>
+            </label>
+
+            <label class="radio-card">
+              <input type="radio" name="rad-diag-l3" value="voltaje_generador">
+              <div class="radio-card-content">
+                <strong>Falla interna del alternador trifásico:</strong>
+                <span>La fuente genera voltajes desbalanceados de 100 V, 120 V y 140 V.</span>
+              </div>
+            </label>
+          </div>
+          <span class="item-status" id="stat-diag-l3" aria-live="polite"></span>
+        </div>
+
+        <!-- 4. Corrective Action & Critical Safety (7 pts) -->
+        <div class="card card-inner mt-4 border-warning">
+          <h4><span class="icon" aria-hidden="true">⚠️</span> 4. Acción Correctiva y Protocolo de Seguridad (7 pts)</h4>
+          <p class="text-warning"><strong>¡ATENCIÓN INGENIERIL!</strong> Ciertas decisiones técnicas representan <em>ERRORES CRÍTICOS</em> de alto riesgo eléctrico (destrucción de equipos por sobretensión o peligro de arco). Selecciona la intervención correcta:</p>
+
+          <div class="radio-group-vertical">
+            <label class="radio-card card-hazard">
+              <input type="radio" name="rad-action-l3" value="desconectar_neutro">
+              <div class="radio-card-content">
+                <strong class="text-danger">[Opción A] Desconectar físicamente el conductor neutro:</strong>
+                <span>"Como por el neutro circulan 3,46 A, lo retiro con un seccionador para que la corriente forzada sea cero".</span>
+              </div>
+            </label>
+
+            <label class="radio-card card-safe">
+              <input type="radio" name="rad-action-l3" value="balancear_cargas">
+              <div class="radio-card-content">
+                <strong class="text-success">[Opción B] Desenergizar y calibrar/balancear las impedancias de fase:</strong>
+                <span>Revisar la instalación bajo procedimiento de bloqueo (LOTO), igualar las resistencias de fase a 12 Ω cada una y verificar el circuito antes de autorizar la energización.</span>
+              </div>
+            </label>
+
+            <label class="radio-card card-hazard">
+              <input type="radio" name="rad-action-l3" value="forzar_reinicio">
+              <div class="radio-card-content">
+                <strong class="text-danger">[Opción C] Autorizar el reinicio inmediato elevando el umbral de los fusibles:</strong>
+                <span>"El sistema todavía funciona, solo incrementemos la capacidad de los interruptores automáticos sin revisar la carga".</span>
+              </div>
+            </label>
+          </div>
+          <span class="item-status" id="stat-action-l3" aria-live="polite"></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="level-actions">
+          <button type="button" id="btn-validate-l3" class="btn-primary btn-md">
+            <span class="icon" aria-hidden="true">✓</span> Validar Diagnóstico y Finalizar Misión
+          </button>
+          <button type="button" id="btn-ask-tutor-l3" class="btn-secondary btn-md">
+            <span class="icon" aria-hidden="true">🤖</span> Pedir Orientación a IA-Fasor
+          </button>
+          <div class="level-attempts" id="attempts-l3" aria-live="polite">
+            Intentos utilizados: 0 / 3
+          </div>
+        </div>
+
+        <div id="feedback-l3" class="feedback-banner hidden" role="alert"></div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SECCIÓN 5: TUTOR IA-FASOR ==================== -->
+    <section id="section-tutor" class="section-panel" role="tabpanel" aria-labelledby="tab-tutor" hidden>
+      <div class="section-header">
+        <div class="flex-between">
+          <div>
+            <h2>Tutor Socrático: IA-Fasor</h2>
+            <p class="section-desc">Orientación pedagógica especializada en análisis de circuitos trifásicos Y-Y. Desarrollado con tecnología generativa supervisada para UNEMI Posgrados.</p>
+          </div>
+          <div class="tutor-status-badge" id="tutor-engine-status">
+            <span class="status-dot"></span>
+            <span id="tutor-status-label">Conectado a IA-Fasor</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Discrete Fallback Notice -->
+      <div id="tutor-fallback-alert" class="alert-fallback hidden" role="status">
+        <span class="icon" aria-hidden="true">🛡️</span>
+        <div class="fallback-text">
+          <strong>IA-Fasor está utilizando orientación de respaldo</strong>
+          <p>El motor pedagógico continúa activo mediante el banco socrático determinista local.</p>
+        </div>
+      </div>
+
+      <div class="tutor-layout">
+        <!-- Chat Dialogue History -->
+        <div class="tutor-chat-container">
+          <div class="chat-messages" id="tutor-chat-messages" role="log" aria-live="polite">
+            <div class="chat-bubble tutor">
+              <div class="bubble-header">
+                <span class="avatar">⚡</span>
+                <span class="name">IA-Fasor</span>
+                <span class="time">Ahora</span>
+              </div>
+              <div class="bubble-body">
+                ¡Saludos! Soy <strong>IA-Fasor</strong>, tu tutor de apoyo técnico para la misión de rescate de la Red Nexo-3. 
+                No revelo respuestas directas ni modifico calificaciones, pero puedo guiarte paso a paso en el análisis de magnitudes de fase, relaciones de línea, cálculo de neutro y prevención de fallas. 
+                ¿En qué ejercicio o concepto requieres orientación?
+              </div>
+            </div>
+          </div>
+
+          <!-- Question Input & Fast Shortcuts -->
+          <div class="chat-input-area">
+            <div class="shortcut-pills">
+              <span class="shortcut-title">Dudas frecuentes:</span>
+              <button class="btn-pill" data-ask="¿Cuál es la diferencia entre voltaje de fase y voltaje de línea en estrella?">Diferencia Vφ vs VL</button>
+              <button class="btn-pill" data-ask="¿Por qué la corriente de neutro es cero en carga equilibrada?">Neutro en equilibrio</button>
+              <button class="btn-pill" data-ask="¿Cómo se suman fasores desfasados a 120 grados?">Suma fasorial a 120°</button>
+              <button class="btn-pill" data-ask="¿Por qué es peligroso desconectar el neutro con cargas desbalanceadas?">Peligro al cortar el neutro</button>
+            </div>
+
+            <form id="form-tutor" class="chat-form" onsubmit="return false;">
+              <div class="form-group-tutor">
+                <textarea id="tutor-user-input" class="form-control tutor-textarea" rows="2" 
+                          placeholder="Formula tu pregunta o explica el procedimiento que estás intentando..." 
+                          maxlength="400" required></textarea>
+                <button type="submit" id="btn-send-tutor" class="btn-primary btn-send">
+                  <span class="icon" aria-hidden="true">📤</span> Enviar
+                </button>
+              </div>
+              <div class="tutor-form-footer">
+                <small class="text-muted">Extensión controlada: 50 a 90 palabras pedagógicas. No se almacenan datos personales.</small>
+                <div id="tutor-char-count" class="char-count">0 / 400</div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Tutor Sidebar with Principles -->
+        <aside class="tutor-sidebar">
+          <div class="card card-inner">
+            <h4><span class="icon" aria-hidden="true">📜</span> Principios Pedagógicos de IA-Fasor</h4>
+            <ul class="principles-list">
+              <li><strong>1.º Intento:</strong> Formula preguntas orientadoras sin revelar el resultado.</li>
+              <li><strong>2.º Intento:</strong> Recuerda las fórmulas y relaciones matemáticas pertinentes.</li>
+              <li><strong>3.º Intento+:</strong> Puede ejemplificar con un ejercicio numérico similar sin tocar tus datos actuales.</li>
+              <li><strong>Determinismo:</strong> La calificación siempre depende del motor estricto de JavaScript, nunca del modelo de lenguaje.</li>
+            </ul>
+          </div>
+
+          <div class="card card-inner mt-3">
+            <h4><span class="icon" aria-hidden="true">💡</span> Ecuaciones Clave</h4>
+            <div class="formula-box">
+              <p>VL = √3 · Vφ ∠30°</p>
+              <p>IL = Iφ = Vφ / Rφ</p>
+              <p>IN = I⃗A + I⃗B + I⃗C</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 6: RESULTADOS & CERTIFICACIÓN ==================== -->
+    <section id="section-resultados" class="section-panel" role="tabpanel" aria-labelledby="tab-resultados" hidden>
+      <div class="section-header">
+        <h2>Panel de Resultados y Certificación de la Misión</h2>
+        <p class="section-desc">Evaluación del desempeño en la Red Nexo-3, cumplimiento de umbrales y reconocimiento de competencias.</p>
+      </div>
+
+      <!-- Results Overview Card -->
+      <div class="results-dashboard">
+        <div class="score-card-hero" id="result-hero-box">
+          <div class="score-dial">
+            <span class="score-big" id="res-final-score">0.0</span>
+            <span class="score-max">/ 100 PTS</span>
+          </div>
+          <div class="score-status-text">
+            <h3 id="res-status-title">Evaluación en proceso</h3>
+            <p id="res-status-desc">Completa los retos de los tres niveles para generar tu dictamen técnico.</p>
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="results-metrics">
+          <div class="metric-item">
+            <span class="metric-label">Nivel 1: Mapa</span>
+            <span class="metric-val" id="metric-n1">0.0 / 20</span>
+            <span class="metric-th" id="metric-th-n1">Umbral: 15.0</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Nivel 2: Cálculo</span>
+            <span class="metric-val" id="metric-n2">0.0 / 35</span>
+            <span class="metric-th" id="metric-th-n2">Umbral: 26.0</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Nivel 3: Diagnóstico</span>
+            <span class="metric-val" id="metric-n3">0.0 / 45</span>
+            <span class="metric-th" id="metric-th-n3">Umbral: 34.0</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Recursos Revisados</span>
+            <span class="metric-val" id="metric-resources">0 / 4</span>
+            <span class="metric-th">Centro Preparación</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Respuestas evaluadas</span>
+            <span class="metric-val" id="metric-attempts">0</span>
+            <span class="metric-th">Eficiencia en ítems</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-label">Errores Corregidos</span>
+            <span class="metric-val" id="metric-errors">0</span>
+            <span class="metric-th">Seguridad y topología</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strengths and Areas of Reinforcement -->
+      <div class="analytics-row">
+        <div class="card card-inner">
+          <h4><span class="icon" aria-hidden="true">⭐</span> Fortalezas Demostradas</h4>
+          <ul class="check-list" id="list-fortalezas">
+            <li>Iniciando el diagnóstico de la red...</li>
+          </ul>
+        </div>
+        <div class="card card-inner">
+          <h4><span class="icon" aria-hidden="true">🎯</span> Aspectos por Reforzar</h4>
+          <ul class="warning-list" id="list-reforzar">
+            <li>Pendiente de validación de los tres niveles.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Recovery Path Box (Hidden unless needed) -->
+      <div id="box-recovery-route" class="recovery-box hidden" role="region" aria-label="Ruta de recuperación pedagógica">
+        <div class="recovery-header">
+          <span class="icon" aria-hidden="true">🔄</span>
+          <div>
+            <h3>Ruta de Recuperación Activada</h3>
+            <p>Tu puntuación actual es inferior al <strong>80 %</strong> o no has superado el umbral de algún nivel. Te recomendamos repasar los siguientes indicadores:</p>
+          </div>
+        </div>
+        <div class="recovery-items" id="recovery-recommendations"></div>
+        <div class="recovery-actions">
+          <button class="btn-primary" id="btn-repeat-pending">
+            Repetir Indicadores Pendientes
+          </button>
+        </div>
+      </div>
+
+      <!-- Symbolic Certification Module (For 90 - 100 pts) -->
+      <div id="box-certificate" class="certificate-box hidden">
+        <div class="cert-header">
+          <h3>🎓 Distinción Académica: Guardián del Equilibrio</h3>
+          <p>Has alcanzado el rango de excelencia (≥ 90 puntos) y has neutralizado todos los riesgos de la Red Nexo-3 sin errores críticos de seguridad.</p>
+        </div>
+
+        <!-- Canvas Certificate Preview -->
+        <div class="cert-canvas-wrapper">
+          <canvas id="canvas-certificate" width="850" height="580" aria-label="Certificación simbólica de restauración expedida por UNEMI Posgrados"></canvas>
+        </div>
+
+        <div class="cert-actions">
+          <button id="btn-download-cert" class="btn-primary btn-md">
+            <span class="icon" aria-hidden="true">💾</span> Descargar Certificado (PNG)
+          </button>
+          <button id="btn-print-cert" class="btn-secondary btn-md">
+            <span class="icon" aria-hidden="true">🖨️</span> Imprimir Certificación
+          </button>
+          <p class="cert-privacy-note">Nota: Este certificado es simbólico y no contiene datos personales transmitidos a servidores externos. Incluye un espacio reglamentario para escribir o colocar tu nombre tras la descarga.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="results-actions-bar">
+        <button id="btn-repeat-all" class="btn-secondary btn-md">
+          <span class="icon" aria-hidden="true">🔄</span> Reiniciar Experiencia
+        </button>
+        <button id="btn-goto-credits" class="btn-primary btn-md">
+          Ver Créditos y Referencias <span aria-hidden="true">➔</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== SECCIÓN 7: CRÉDITOS Y REFERENCIAS ==================== -->
+    <section id="section-creditos" class="section-panel" role="tabpanel" aria-labelledby="tab-creditos" hidden>
+      <div class="section-header">
+        <h2>Créditos Institucionales y Referencias Bibliográficas</h2>
+        <p class="section-desc">Proyecto académico elaborado por estudiantes de la Maestría en Educación de la Universidad Estatal de Milagro (UNEMI).</p>
+      </div>
+
+      <div class="credits-grid">
+        <!-- Authors Card -->
+        <div class="card card-navy">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">👥</span> Equipo Desarrollador – Grupo N.º 4</h3>
+          </div>
+          <div class="card-body">
+            <ul class="authors-list">
+              <li><strong>Bonilla Brito</strong> Francheska Tamara</li>
+              <li><strong>Bonilla Correa</strong> Brayan Alexander</li>
+              <li><strong>Cacuango Ochoa</strong> David Andrés</li>
+              <li><strong>Calixto Medina</strong> Mabel Yaily</li>
+            </ul>
+
+            <div class="mentor-box mt-3">
+              <h4>DOCENTE DE LA ASIGNATURA:</h4>
+              <p><strong>MSc. Felipe Emiliano Arévalo Cordovilla</strong></p>
+              <p class="meta-inst">Universidad Estatal de Milagro – UNEMI Posgrados</p>
+              <p class="meta-year">Año lectivo: <strong>2026</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital Tools & AI Used Card -->
+        <div class="card card-navy">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">🛠️</span> Herramientas digitales e inteligencia artificial utilizadas</h3>
+          </div>
+          <div class="card-body">
+            <ul class="tools-list">
+              <li><strong>NotebookLM:</strong> creación y enriquecimiento de recursos educativos.</li>
+              <li><strong>Genially:</strong> laboratorio interactivo.</li>
+              <li><strong>Gemini:</strong> orientación generativa del Tutor IA-Fasor.</li>
+              <li><strong>Antigravity:</strong> desarrollo y pruebas del ecosistema web.</li>
+              <li><strong>Tecnologías:</strong> HTML, CSS, JavaScript y Node.js.</li>
+            </ul>
+            <div class="team-declaration-box mt-3">
+              <p><em>“La selección de contenidos, validación de cálculos, diseño pedagógico, comprobación de respuestas y revisión final fueron realizadas por los integrantes del Grupo N.º 4.”</em></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- License Card -->
+        <div class="card card-navy credits-license-card">
+          <div class="card-header">
+            <h3><span class="icon" aria-hidden="true">⚖️</span> Licenciamiento Abierto</h3>
+          </div>
+          <div class="card-body">
+            <div class="license-badge">
+              <span class="license-icon" aria-hidden="true">🅭🅯🅎</span>
+              <div>
+                <strong>Creative Commons Atribución-CompartirIgual 4.0 Internacional (CC BY-SA 4.0)</strong>
+                <p>La licencia CC BY-SA 4.0 se aplica únicamente al contenido original creado por el equipo. El logotipo y los elementos institucionales de UNEMI conservan sus derechos correspondientes. Los recursos externos enlazados mantienen sus propias condiciones de uso.</p>
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer" class="btn-link">
+                  Ver resumen de la licencia oficial ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IEEE References -->
+      <div class="card card-navy mt-4">
+        <div class="card-header">
+          <h3><span class="icon" aria-hidden="true">📚</span> Referencias Bibliográficas (Formato IEEE)</h3>
+        </div>
+        <div class="card-body">
+          <ul class="ieee-list">
+            <li>
+              [1] J. W. Nilsson y S. A. Riedel, <em>Electric Circuits</em>, 12.ª ed. Pearson, 2023.
+            </li>
+            <li>
+              [2] C. K. Alexander y M. N. O. Sadiku, <em>Fundamentals of Electric Circuits</em>, 7.ª ed. McGraw-Hill, 2021.
+            </li>
+            <li>
+              [3] M. Sailer y L. Homner, “The Gamification of Learning: A Meta-analysis,” <em>Educational Psychology Review</em>, vol. 32, n.º 1, pp. 77-112, 2020, doi: <a href="https://doi.org/10.1007/s10648-019-09498-w" target="_blank" rel="noopener noreferrer">10.1007/s10648-019-09498-w</a>.
+            </li>
+            <li>
+              [4] F. Miao y W. Holmes, <em>Guidance for Generative AI in Education and Research</em>. París: UNESCO, 2023.
+            </li>
+            <li>
+              [5] Creative Commons, “Atribución-CompartirIgual 4.0 Internacional (CC BY-SA 4.0),” 2023. [En línea]. Disponible en: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noopener noreferrer">https://creativecommons.org/licenses/by-sa/4.0/deed.es</a>. [Consulta: 03-sep-2026].
+            </li>
+            <li>
+              [6] Grupo N.º 4, “De la onda al fasor: parámetros de una señal alterna”, NotebookLM, 2026. [En línea]. Disponible en: <a href="https://notebook.google.com/notebook/a31ed613-5d51-491f-802a-4beb6a6c469b/artifact/b11184cc-04ca-4955-bf21-97904e0d8878?utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1" target="_blank" rel="noopener noreferrer">https://notebook.google.com/notebook/a31ed613-5d51-491f-802a-4beb6a6c469b/artifact/b11184cc-04ca-4955-bf21-97904e0d8878</a>. [Consulta: 03-sep-2026].
+            </li>
+            <li>
+              [7] Grupo N.º 4, “Fasores trifásicos: secuencias ABC y ACB”, NotebookLM, 2026. [En línea]. Disponible en: <a href="https://notebook.google.com/notebook/a31ed613-5d51-491f-802a-4beb6a6c469b/artifact/d95668b8-3e22-40dd-91e5-fc2fd27c656f?utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1" target="_blank" rel="noopener noreferrer">https://notebook.google.com/notebook/d95668b8-3e22-40dd-91e5-fc2fd27c656f</a>. [Consulta: 03-sep-2026].
+            </li>
+            <li>
+              [8] Grupo N.º 4, “Conexión trifásica Y-Y equilibrada: voltajes, corrientes y neutro”, NotebookLM, 2026. [En línea]. Disponible en: <a href="https://notebook.google.com/notebook/ba90f627-4460-4662-a4fc-c8496aaba4b0/artifact/1eeacf63-a3d7-4554-a587-4fe141b9f4a4?utm_content=&amp;utm_smc=nlm_web_share_google_oo_art_share_1" target="_blank" rel="noopener noreferrer">https://notebook.google.com/notebook/ba90f627-4460-4662-a4fc-c8496aaba4b0/artifact/1eeacf63-a3d7-4554-a587-4fe141b9f4a4</a>. [Consulta: 03-sep-2026].
+            </li>
+            <li>
+              [9] Grupo N.º 4, “Laboratorio interactivo: simulación de una conexión trifásica Y-Y equilibrada”, Genially, 2026. [En línea]. Disponible en: <a href="https://view.genially.com/6a867185fa694738e3ec6bcc" target="_blank" rel="noopener noreferrer">https://view.genially.com/6a867185fa694738e3ec6bcc</a>. [Consulta: 03-sep-2026].
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RESOURCE VIEWER MODAL -->
+  <div id="modal-resource" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-res-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="modal-res-title">Visualizador de Recurso Educativo</h3>
+        <button id="btn-close-modal" class="btn-icon" aria-label="Cerrar visualizador">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-iframe-container" class="iframe-box">
+          <iframe id="resource-iframe" src="" title="Recurso educativo UNEMI" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div id="modal-fallback-box" class="modal-fallback-box hidden">
+          <p>Este recurso no permite la inserción directa en marco debido a políticas del proveedor.</p>
+          <a id="btn-modal-external" href="#" target="_blank" rel="noopener noreferrer" class="btn-primary">
+            Abrir recurso en pestaña nueva ↗
+          </a>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-modal-mark-reviewed" class="btn-primary btn-sm">Marcar como revisado y volver</button>
+        <button id="btn-modal-cancel" class="btn-secondary btn-sm">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

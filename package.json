@@ -1,0 +1,30 @@
+{
+  "name": "circuitos-en-equilibrio-nexo3",
+  "version": "1.0.0",
+  "description": "Aplicación web educativa: Misión Equilibrio – Rescate de la Red Nexo-3 para UNEMI Posgrados",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "unemi",
+    "posgrados",
+    "circuitos-trifasicos",
+    "educacion",
+    "gamificacion",
+    "gemini-api"
+  ],
+  "author": "Grupo N.º 4 - UNEMI Posgrados",
+  "license": "CC-BY-SA-4.0",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
